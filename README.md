@@ -1,11 +1,12 @@
 # Media server power button
 
-Setup to run on boot:
-```
-sudo chmod +x button.py
-crontab -e
-```
-Add the following line:
+## Requirements
+- RPI GPIO: `sudo apt-get install rpi.gpio`
+- python3
+- python dotenv: `pip3 install python-dotenv`
+
+## Run on boot:
+Edit crontab `crontab -e` and add the following line:
 ```
 @reboot python3 /path/to/repo/button.py &
 ```
