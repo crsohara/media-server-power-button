@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import os # Gives Python access to Linux commands
+from os.path import join, dirname
+from dotenv import load_dotenv
 import subprocess
 import time # Proves time related commands
 import RPi.GPIO as GPIO # Gives Python access to the GPIO pins
@@ -19,8 +21,12 @@ f_handler.setFormatter(f_format)
 # Add handlers to the logger
 logger.addHandler(f_handler)
 
-IpAddr = '<IPV4>'
-MacAddr = '<MAC>'
+DIR = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = join(DIR, '.env')
+load_dotenv(dotenv_path)
+IPV4 = os.getenv('IPV4')
+MAC = os.getenv('MAC')
+
 
 state = ''
 
@@ -71,7 +77,7 @@ def blink(argument):
 
 def run_wakeonlan():
   print("Button pressed, waking machine")
-  process = subprocess.Popen(['wakeonlan', MacAddr], stdout=subprocess.PIPE, universal_newlines=True)
+  process = subprocess.Popen(['wakeonlan', MAC], stdout=subprocess.PIPE, universal_newlines=True)
   stdout, stderr = process.communicate()
   print(stdout)
   print(stderr)
@@ -80,7 +86,7 @@ def run_shutdown():
   print("Long pressed, shutting down")
   try:
     print('Attempting to shut down...')
-    r = requests.get('http://' + IpAddr + ':9989/shutdown')
+    r = requests.get('http://' + IPV4 + ':9989/shutdown')
     # print(r)
     # logger.info(r)
   except:
@@ -114,7 +120,7 @@ GPIO.add_event_detect(ButtonPin, GPIO.FALLING, callback=button_press, bouncetime
 def status_ping():
   try:
       response = subprocess.check_output(
-          ['ping', '-c', '1', IpAddr],
+          ['ping', '-c', '1', IPV4],
           stderr=subprocess.STDOUT,  # get all output
           universal_newlines=True  # return string not bytes
       )
