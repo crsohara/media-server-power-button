@@ -86,7 +86,7 @@ def run_shutdown():
   print("Long pressed, shutting down")
   try:
     print('Attempting to shut down...')
-    r = requests.get('http://' + IPV4 + ':9989/shutdown')
+    r = requests.get('http://' + IPV4 + ':9979/shutdown')
     # print(r)
     # logger.info(r)
   except:
