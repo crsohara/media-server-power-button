@@ -9,9 +9,11 @@ import requests
 import logging
 from logging.handlers import RotatingFileHandler
 
+DIR = os.path.dirname(os.path.abspath(__file__))
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-f_handler = logging.FileHandler('button-py.log')
+f_handler = RotatingFileHandler(join(DIR, 'button-py.log'), maxBytes=2000, backupCount=2)
 f_handler.setLevel(logging.INFO)
 
 # Create formatters and add it to handlers
@@ -21,7 +23,6 @@ f_handler.setFormatter(f_format)
 # Add handlers to the logger
 logger.addHandler(f_handler)
 
-DIR = os.path.dirname(os.path.abspath(__file__))
 dotenv_path = join(DIR, '.env')
 load_dotenv(dotenv_path)
 IPV4 = os.getenv('IPV4')
